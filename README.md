@@ -3,6 +3,8 @@
 ```
 virtualenv -p python3 venv
 ./venv/bin/pip install -r requirements.txt
+cp .env.example .env 
+# Edit .env file with actual values from a sensor
 python main.py
 ```
 
