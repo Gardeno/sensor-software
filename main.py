@@ -88,18 +88,21 @@ def on_message(ws, text_message):
             return send(ws, 'error', {
                 "message": "Missing parameter `pin` (integer) in message data"
             })
-        desired_pin = message['data']['pin']
-        if not output_devices[desired_pin]:
-            output_devices[desired_pin] = gpiozero.OutputDevice(desired_pin, active_high=False,
-                                                                initial_value=False)
-        if message['id'] == 'setup_relay':
-            logging.info('Successfully set up {} as relay'.format(desired_pin))
-        elif message['id'] == 'turn_on_relay':
-            output_devices[desired_pin].on()
-            logging.info('Successfully turned on pin {}'.format(desired_pin))
-        elif message['id'] == 'turn_off_relay':
-            output_devices[desired_pin].on()
-            logging.info('Successfully turned off pin {}'.format(desired_pin))
+        try:
+            desired_pin = message['data']['pin']
+            if not output_devices[desired_pin]:
+                output_devices[desired_pin] = gpiozero.OutputDevice(desired_pin, active_high=False,
+                                                                    initial_value=False)
+            if message['id'] == 'setup_relay':
+                logging.info('Successfully set up {} as relay'.format(desired_pin))
+            elif message['id'] == 'turn_on_relay':
+                output_devices[desired_pin].on()
+                logging.info('Successfully turned on pin {}'.format(desired_pin))
+            elif message['id'] == 'turn_off_relay':
+                output_devices[desired_pin].on()
+                logging.info('Successfully turned off pin {}'.format(desired_pin))
+        except Exception as err:
+            logging.error('Unable to perform action on relay: {}'.format(err))
 
 
 def on_error(ws, error):
