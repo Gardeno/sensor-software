@@ -7,10 +7,9 @@ import os
 import signal
 from Adafruit_SHT31 import *
 from dotenv import load_dotenv
-from pathlib import Path
 import websocket
 
-env_path = Path('.') / '.env'
+env_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '.env')
 load_dotenv(dotenv_path=env_path)
 
 root = logging.getLogger()
